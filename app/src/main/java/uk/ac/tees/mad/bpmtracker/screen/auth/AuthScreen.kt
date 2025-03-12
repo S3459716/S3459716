@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
@@ -28,6 +27,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,25 +38,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import uk.ac.tees.mad.bpmtracker.R
-import uk.ac.tees.mad.bpmtracker.ui.theme.BPMTrackerTheme
+import uk.ac.tees.mad.bpmtracker.utils.Constants
+import uk.ac.tees.mad.bpmtracker.viewmodel.AuthViewModel
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(
+    viewModel: AuthViewModel = hiltViewModel(),
+    navController: NavController
+) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var isLogin by remember { mutableStateOf(true) }
-    var isLoading by remember { mutableStateOf(false) }
+    val isLoading by viewModel.isLoading.collectAsState()
+    val isLoginSuccess by viewModel.isLoginSuccess.collectAsState()
+
+    val context = LocalContext.current
+
+    LaunchedEffect(isLoginSuccess){
+        if(isLoginSuccess) {
+            navController.navigate(Constants.MAIN_SCREEN) {
+                popUpTo(Constants.AUTH_SCREEN) {
+                    inclusive = true
+                }
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()
         .background(color = Color(0xFFBCCCDC))){
@@ -153,10 +173,10 @@ fun AuthScreen() {
             if (!isLoading) {
                 TextButton(onClick = {
                     if (isLogin){
-
+                        viewModel.loginUser(email, password,context)
                     }
                     else{
-
+                        viewModel.registerUser(name, email, password, context)
                     }
                 },
                     shape = RoundedCornerShape(8.dp),
@@ -202,14 +222,5 @@ fun AuthScreen() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AuthScreenPreview() {
-    BPMTrackerTheme {
-        AuthScreen()
-
     }
 }

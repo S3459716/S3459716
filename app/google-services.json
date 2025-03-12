@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "373443770344",
+    "project_id": "bpm-tracker-2f1ac",
+    "storage_bucket": "bpm-tracker-2f1ac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373443770344:android:cc442ed3e86ccc2b08165d",
+        "android_client_info": {
+          "package_name": "uk.ac.tees.mad.bpmtracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS8Qveufoev8E1STSEtHGH4M2WVL9MsCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

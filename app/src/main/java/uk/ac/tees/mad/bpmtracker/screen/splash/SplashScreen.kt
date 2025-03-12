@@ -17,11 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import kotlinx.coroutines.CoroutineStart
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import uk.ac.tees.mad.bpmtracker.R
 import uk.ac.tees.mad.bpmtracker.utils.Constants
@@ -31,13 +30,14 @@ fun SplashScreen(
     navController: NavController
 ) {
     var showIcon by remember { mutableStateOf(false) }
+    val auth = FirebaseAuth.getInstance()
     LaunchedEffect(Unit) {
         delay(500)
         showIcon = true
         delay(2000)
         showIcon = false
         delay(800)
-        navController.navigate(Constants.AUTH_SCREEN){
+        navController.navigate(if (auth.currentUser != null) Constants.MAIN_SCREEN else Constants.AUTH_SCREEN){
             popUpTo(Constants.SPLASH_SCREEN){
                 inclusive = true
             }

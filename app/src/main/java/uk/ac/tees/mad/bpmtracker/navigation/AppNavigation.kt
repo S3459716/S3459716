@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import uk.ac.tees.mad.bpmtracker.screen.auth.AuthScreen
+import uk.ac.tees.mad.bpmtracker.screen.main.MainScreen
 import uk.ac.tees.mad.bpmtracker.screen.splash.SplashScreen
 import uk.ac.tees.mad.bpmtracker.utils.Constants
 
@@ -17,7 +18,12 @@ fun AppNavigation() {
             SplashScreen(navController)
         }
         composable(Constants.AUTH_SCREEN) {
-            AuthScreen()
+            AuthScreen(navController = navController)
         }
+
+        composable(Constants.MAIN_SCREEN) {
+            MainScreen()
+        }
+
     }
 }
