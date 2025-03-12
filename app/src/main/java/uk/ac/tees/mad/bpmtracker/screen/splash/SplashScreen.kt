@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.bpmtracker.screen
+package uk.ac.tees.mad.bpmtracker.screen.splash
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -20,18 +20,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.delay
 import uk.ac.tees.mad.bpmtracker.R
+import uk.ac.tees.mad.bpmtracker.utils.Constants
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    navController: NavController
+) {
     var showIcon by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         delay(500)
         showIcon = true
         delay(2000)
         showIcon = false
-        delay(1000)
+        delay(800)
+        navController.navigate(Constants.AUTH_SCREEN){
+            popUpTo(Constants.SPLASH_SCREEN){
+                inclusive = true
+            }
+        }
     }
     Box(
         contentAlignment = Alignment.Center,
@@ -52,11 +62,4 @@ fun SplashScreen() {
             }
         }
     }
-}
-
-// preview
-@Preview(showBackground = true)
-@Composable
-fun SplashScreenPreview() {
-    SplashScreen()
 }
