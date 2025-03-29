@@ -34,20 +34,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import kotlin.math.max
 import kotlin.math.min
 
 @Composable
 fun RecordScreen(
+    viewModel: RecordViewModel = hiltViewModel(),
     modifier:Modifier = Modifier
 ) {
     var bpm by remember { mutableIntStateOf(0) }
     val tapTimes = remember { mutableListOf<Long>() }
     var progress by remember { mutableFloatStateOf(0.0f) }
     var recordName by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
@@ -136,7 +140,9 @@ fun RecordScreen(
                 modifier = Modifier
                     .weight(1f)
             )
-            TextButton(onClick = {},
+            TextButton(onClick = {
+                viewModel.saveRecord(recordName,bpm,context)
+            },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(),
                 modifier = Modifier.padding(start = 6.dp)

@@ -64,6 +64,8 @@ dependencies {
     // firebase auth
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
+    // fireStore
+    implementation("com.google.firebase:firebase-firestore")
 
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
