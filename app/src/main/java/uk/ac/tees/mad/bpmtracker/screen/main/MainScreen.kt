@@ -27,7 +27,7 @@ fun MainScreen() {
         when (selectedScreen) {
             0->RecordScreen(modifier = Modifier.padding(paddingValues))
             1->HistoryScreen()
-            2->ProfileScreen()
+            2->ProfileScreen(modifier = Modifier.padding(paddingValues))
         }
     }
 }
