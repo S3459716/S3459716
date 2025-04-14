@@ -8,30 +8,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import uk.ac.tees.mad.bpmtracker.database.RecordEntity
-import uk.ac.tees.mad.bpmtracker.ui.theme.BPMTrackerTheme
+import uk.ac.tees.mad.bpmtracker.screen.home.RecordViewModel
 
 @Composable
-fun HistoryScreen(modifier: Modifier = Modifier) {
+fun HistoryScreen(
+    viewModel: RecordViewModel,
+    modifier: Modifier = Modifier) {
+
+    val records by viewModel.recordList.collectAsState()
+
     val colors = listOf(
         Color(0xFFffd6ff),
         Color(0xFFe7c6ff),
         Color(0xFFc8b6ff),
         Color(0xFFb8c0ff),
         Color(0xFFbbd0ff)
-    )
-    val entity = RecordEntity(
-        name = "Record 1",
-        bpm = 172
     )
     Box(
         contentAlignment = Alignment.Center,
@@ -59,21 +61,13 @@ fun HistoryScreen(modifier: Modifier = Modifier) {
             }
 
             LazyColumn {
-                items(15){ index->
+                itemsIndexed(records){index, item ->
                     RecordItem(
                         colors[index%5],
-                        entity
+                        item
                     )
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HistoryPrev() {
-    BPMTrackerTheme {
-        HistoryScreen()
     }
 }
