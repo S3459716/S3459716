@@ -9,24 +9,32 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uk.ac.tees.mad.bpmtracker.screen.home.RecordViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     viewModel: RecordViewModel,
     modifier: Modifier = Modifier) {
 
     val records by viewModel.recordList.collectAsState()
+
+    val context = LocalContext.current
 
     val colors = listOf(
         Color(0xFFffd6ff),
@@ -61,11 +69,36 @@ fun HistoryScreen(
             }
 
             LazyColumn {
-                itemsIndexed(records){index, item ->
-                    RecordItem(
-                        colors[index%5],
-                        item
+                itemsIndexed(records, key = { _, item -> item.id }) { index, item ->
+                    val dismissState = rememberSwipeToDismissBoxState(
+                        confirmValueChange = {
+                            if (it == SwipeToDismissBoxValue.EndToStart) {
+                                viewModel.deleteRecord(item, context)
+                                true
+                            } else {
+                                false
+                            }
+                        }
                     )
+
+                    SwipeToDismissBox(
+                        state = dismissState,
+                        backgroundContent = {
+                            Box(
+                                contentAlignment = Alignment.CenterEnd,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.Red)
+                            ) {
+                                Text("Delete", modifier = Modifier.padding(16.dp))
+                            }
+                        }
+                    ) {
+                        RecordItem(
+                            colors[index % 5],
+                            item
+                        )
+                    }
                 }
             }
         }
