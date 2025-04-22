@@ -63,7 +63,6 @@ fun EditProfileBottomSheet(
                 modifier = Modifier
                     .size(70.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .border(1.dp, color = Color.Gray, shape = CircleShape)
                     .clickable {
                         onImageClick()
                     }

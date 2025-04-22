@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import uk.ac.tees.mad.bpmtracker.screen.home.RecordViewModel
+import uk.ac.tees.mad.bpmtracker.viewmodel.RecordViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

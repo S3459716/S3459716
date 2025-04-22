@@ -1,4 +1,4 @@
-package uk.ac.tees.mad.bpmtracker.screen.home
+package uk.ac.tees.mad.bpmtracker.viewmodel
 
 import android.content.Context
 import android.util.Log
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
