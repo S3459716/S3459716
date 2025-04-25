@@ -1,7 +1,7 @@
 package uk.ac.tees.mad.bpmtracker.di
 
 import android.content.Context
-import com.google.firebase.Firebase
+import com.cloudinary.Cloudinary
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -27,6 +27,18 @@ object AppModule {
     @Singleton
     fun provideFireStore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCloudinary():Cloudinary{
+        val config = HashMap<String,String>().apply {
+            put("cloud_name", "dtbkjek0w")
+            put("api_key", "918463645369112")
+            put("api_secret", "8MFlQWUQn2ZvxAadost4kI3ieXM")
+        }
+
+        return Cloudinary(config)
     }
 
     @Provides

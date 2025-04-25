@@ -152,7 +152,12 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
         EditProfileBottomSheet(
             currentName = "Name",
             uri = uri,
-            onSave = {},
+            onSave = {
+                uri?.let {
+                    it1 -> viewModel.setImageUri1(it1)
+                    viewModel.uploadImageToCloudinary(context)
+                }
+            },
             onImageClick = {
                 if (hasPermission) {
                     uri = viewModel.generateTempUri()
