@@ -45,7 +45,7 @@ import uk.ac.tees.mad.bpmtracker.R
 import uk.ac.tees.mad.bpmtracker.viewmodel.ProfileViewModel
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
+fun ProfileScreen(viewModel: ProfileViewModel) {
     var isEditing by remember{ mutableStateOf(false) }
     val imageUri by viewModel.imageUri.collectAsState()
     var uri by remember { mutableStateOf<Uri?>(null) }
@@ -99,7 +99,7 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                     fontSize = 28.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    modifier  = Modifier.padding(top = 24.dp, start = 16.dp)
+                    modifier  = Modifier.padding(top = 28.dp, start = 16.dp)
                 )
                 IconButton({isEditing = true},
                     modifier = Modifier
@@ -126,12 +126,12 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
                 error = painterResource(id = R.drawable.profile_pic)
             )
         }
-        Text("Name",
+        Text(viewModel.name?:"Name",
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(top = 16.dp)
         )
-        Text("test12@gmail.com",
+        Text(viewModel.email?:"",
             fontSize = 14.sp,
         )
 
@@ -150,13 +150,14 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
 
     if (isEditing){
         EditProfileBottomSheet(
-            currentName = "Name",
+            currentName = viewModel.name?:"",
             uri = uri,
             onSave = {
                 uri?.let {
                     it1 -> viewModel.setImageUri1(it1)
-                    viewModel.uploadImageToCloudinary(context)
                 }
+                viewModel.updateProfile(it,context)
+                isEditing = false
             },
             onImageClick = {
                 if (hasPermission) {

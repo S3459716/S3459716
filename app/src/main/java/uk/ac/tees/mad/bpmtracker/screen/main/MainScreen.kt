@@ -13,10 +13,12 @@ import uk.ac.tees.mad.bpmtracker.screen.history.HistoryScreen
 import uk.ac.tees.mad.bpmtracker.screen.home.RecordScreen
 import uk.ac.tees.mad.bpmtracker.viewmodel.RecordViewModel
 import uk.ac.tees.mad.bpmtracker.screen.profile.ProfileScreen
+import uk.ac.tees.mad.bpmtracker.viewmodel.ProfileViewModel
 
 @Composable
 fun MainScreen() {
     val recordViewModel: RecordViewModel = hiltViewModel()
+    val profileViewModel: ProfileViewModel = hiltViewModel()
     var selectedScreen by rememberSaveable { mutableIntStateOf(0) }
     Scaffold(
         bottomBar = {
@@ -30,7 +32,7 @@ fun MainScreen() {
         when (selectedScreen) {
             0->RecordScreen(recordViewModel,modifier = Modifier.padding(paddingValues))
             1->HistoryScreen(recordViewModel, modifier = Modifier.padding(paddingValues))
-            2->ProfileScreen()
+            2->ProfileScreen(profileViewModel)
         }
     }
 }

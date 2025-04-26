@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.cloudinary.Cloudinary
 import com.cloudinary.utils.ObjectUtils
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +37,12 @@ class ProfileViewModel @Inject constructor(
     private val _profilePicChange = MutableStateFlow(false)
 
     private val userId = auth.currentUser?.uid?:""
+    var name = auth.currentUser?.displayName
+    val email = auth.currentUser?.email
+
+    init {
+        _imageUri.value = auth.currentUser?.photoUrl
+    }
 
 
     fun checkCameraPermission(context: Context) {
@@ -49,7 +56,7 @@ class ProfileViewModel @Inject constructor(
         return FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
     }
 
-    fun uploadImageToCloudinary(context: Context) {
+    private fun uploadImageToCloudinary(context: Context) {
         if (_imageUri.value!=null) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
@@ -63,11 +70,27 @@ class ProfileViewModel @Inject constructor(
 
                     val imageUrl = request["secure_url"] as? String ?: ""
 
-                    Log.d("Image url",imageUrl)
+                    val profileUpdate = UserProfileChangeRequest.Builder()
+                        .setPhotoUri(Uri.parse(imageUrl))
+                        .build()
+                    auth.currentUser?.updateProfile(profileUpdate)
 
                 } catch (e: Exception) {
                     Log.e("Upload error", e.message.toString())
                 }
+            }
+        }
+    }
+
+    fun updateProfile(newName:String, context: Context){
+        name = newName
+        viewModelScope.launch {
+            val profileUpdate = UserProfileChangeRequest.Builder()
+                .setDisplayName(newName)
+                .build()
+            auth.currentUser?.updateProfile(profileUpdate)
+            if (_profilePicChange.value){
+                uploadImageToCloudinary(context)
             }
         }
     }
