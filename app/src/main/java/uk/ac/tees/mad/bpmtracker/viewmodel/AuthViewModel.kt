@@ -19,7 +19,7 @@ class AuthViewModel @Inject constructor(
     private val _isLoginSuccess = MutableStateFlow(false)
     val isLoginSuccess: StateFlow<Boolean> = _isLoginSuccess.asStateFlow()
     private val _isLoading = MutableStateFlow(false)
-    val isLoading:StateFlow<Boolean> = _isLoginSuccess.asStateFlow()
+    val isLoading:StateFlow<Boolean> get() = _isLoading
 
     fun loginUser(email:String, password:String, context: Context){
         if(email.isEmpty()){
@@ -37,7 +37,11 @@ class AuthViewModel @Inject constructor(
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             _isLoading.value = false
             _isLoginSuccess.value = it.isSuccessful
-            Toast.makeText(context, it.isSuccessful.toString(), Toast.LENGTH_SHORT).show()
+            if (it.isSuccessful){
+                Toast.makeText(context,"Login success", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,"Login Failed", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

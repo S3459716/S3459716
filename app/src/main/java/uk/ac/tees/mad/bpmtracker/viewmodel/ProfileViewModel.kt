@@ -26,7 +26,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val application: Application,
     private val cloudinary: Cloudinary,
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
 ):ViewModel() {
 
     private val _imageUri = MutableStateFlow<Uri?>(null)
@@ -101,5 +101,9 @@ class ProfileViewModel @Inject constructor(
 
     fun setImageUri1(uri: Uri) {
         _imageUri.value = uri
+    }
+
+    fun logOut(){
+        auth.signOut()
     }
 }

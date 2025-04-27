@@ -12,11 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uk.ac.tees.mad.bpmtracker.database.RecordEntity
-import uk.ac.tees.mad.bpmtracker.ui.theme.BPMTrackerTheme
 import uk.ac.tees.mad.bpmtracker.utils.Utils.convertMillisToDate
 
 @Composable
@@ -52,21 +50,6 @@ fun RecordItem(
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
             color = Color(0xFF0466c8)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ItemPrev() {
-    val entity = RecordEntity(
-        name = "Record 1",
-        bpm = 172
-    )
-    BPMTrackerTheme {
-        RecordItem(
-            Color(0xFFb8c0ff),
-            entity
         )
     }
 }

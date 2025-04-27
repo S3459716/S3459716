@@ -39,16 +39,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import uk.ac.tees.mad.bpmtracker.R
+import uk.ac.tees.mad.bpmtracker.utils.Constants
 import uk.ac.tees.mad.bpmtracker.viewmodel.ProfileViewModel
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel) {
+fun ProfileScreen(viewModel: ProfileViewModel, navController: NavController) {
     var isEditing by remember{ mutableStateOf(false) }
     val imageUri by viewModel.imageUri.collectAsState()
-    var uri by remember { mutableStateOf<Uri?>(null) }
+    var uri by remember { mutableStateOf(imageUri) }
+    var uriTemp by remember { mutableStateOf<Uri?>(null) }
     val hasPermission by viewModel.hasCameraPermission.collectAsState()
     val context = LocalContext.current
 
@@ -135,7 +137,14 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             fontSize = 14.sp,
         )
 
-        TextButton({},
+        TextButton({
+            viewModel.logOut()
+            navController.navigate(Constants.AUTH_SCREEN){
+                popUpTo(Constants.MAIN_SCREEN){
+                    inclusive = true
+                }
+            }
+        },
             colors = ButtonDefaults.buttonColors(),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.padding(16.dp)
@@ -161,8 +170,9 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             },
             onImageClick = {
                 if (hasPermission) {
-                    uri = viewModel.generateTempUri()
-                    cameraLauncher.launch(uri!!)
+                    uriTemp = viewModel.generateTempUri()
+                    cameraLauncher.launch(uriTemp!!)
+                    uri = uriTemp
                 } else {
                     permissionLauncher.launch(Manifest.permission.CAMERA)
                 }

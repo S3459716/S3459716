@@ -69,7 +69,7 @@ fun HistoryScreen(
             }
 
             LazyColumn {
-                itemsIndexed(records, key = { _, item -> item.id }) { index, item ->
+                itemsIndexed(records, key = { _, item -> item.firebaseId }) { index, item ->
                     val dismissState = rememberSwipeToDismissBoxState(
                         confirmValueChange = {
                             if (it == SwipeToDismissBoxValue.EndToStart) {

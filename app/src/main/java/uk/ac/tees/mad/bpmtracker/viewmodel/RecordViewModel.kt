@@ -35,16 +35,16 @@ class RecordViewModel @Inject constructor(
     fun saveRecord(name:String, bpm:Int, context: Context){
         viewModelScope.launch {
             if (name.isNotEmpty()) {
-                val newRecord = RecordEntity(name = name, bpm = bpm)
-                val id = repository.addRecord(entity = newRecord)
+                val newRecord = RecordEntity(name = name, bpm = bpm, userId = userId)
                 db.collection(USER)
                     .document(userId)
                     .collection(RECORDS)
-                    .add(newRecord.copy(id = id))
+                    .add(newRecord)
                     .addOnSuccessListener { doc->
                         val docId = doc.id
+                        doc.set(newRecord.copy(firebaseId = docId))
                         viewModelScope.launch {
-                            repository.addRecord(newRecord.copy(id = id, firebaseId = docId))
+                            repository.addRecord(newRecord.copy(firebaseId = docId))
                             Toast.makeText(context,"Record added successfully", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -71,7 +71,7 @@ class RecordViewModel @Inject constructor(
 
     private fun syncData(){
         viewModelScope.launch {
-            repository.getAllRecords().collect{
+            repository.getAllRecords(userId).collect{
                 _recordList.value = it
                 if (_recordList.value.isEmpty()){
                     db.collection(USER)
@@ -85,7 +85,7 @@ class RecordViewModel @Inject constructor(
                             Log.e("Data Retrieval", "Yes")
                             viewModelScope.launch {
                                 mRecords.forEach { record->
-                                    repository.addRecord(record)
+                                    repository.addRecord(record.copy())
                                 }
                             }
                         }
